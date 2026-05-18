@@ -1,7 +1,7 @@
 const mysql = require("mysql2");
 
 // Create connection pool (without promise wrapper)
-const pool = mysql.createPool({
+const poolConfig = process.env.DATABASE_URL || {
   host: process.env.DB_HOST || "localhost",
   port: process.env.DB_PORT || 3306,
   user: process.env.DB_USER || "root",
@@ -11,7 +11,9 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
-});
+};
+
+const pool = mysql.createPool(poolConfig);
 
 // Test connection
 pool.getConnection((err, connection) => {
